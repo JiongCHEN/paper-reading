@@ -7,6 +7,7 @@
 \setlength{\subfigcapskip}{-.5em}
 \usepackage{beamerthemesplit}
 \usetheme{lankton-keynote}
+\input{preamble.tex}
 
 \author[Jiong Chen]{Jiong Chen}
 
@@ -113,13 +114,111 @@
     \end{equation*}
     \item Quadratic distance Measures.
       \begin{equation*}
-	W(\mathbf{q}, \mathbf{p})=\frac{1}{2}\|\math
+	W(\mathbf{q}, \mathbf{p})=\frac{w}{2}\|\mathbf{Aq}-\mathbf{Bp}\|^2_F+\delta_{\mathbf{C}}(\mathbf{p})
       \end{equation*}
+      $\mathbf{C}$ could be any constraint $\mathbf{C}(\mathbf{q})=\mathbf{0}$ for the set of desired configurations. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Projective Implicit Euler Solver}
+ \begin{itemize}
+  \item Implicit integration to optimization
+    \begin{equation*}
+      \frac{1}{2h^2}\|\mathbf{M}^{\frac{1}{2}}(\mathbf{q}-\mathbf{s}_n)\|^2_F+\sum_i \frac{w_i}{2}\|\mathbf{A}_i
+      \mathbf{S}_i\mathbf{q}-\mathbf{B}_i\mathbf{p}_i\|^2_F+\delta_{\mathbf{C}_i}(\mathbf{p}_i)
+    \end{equation*}
+  \item Local solve: fix position $\mathbf{q}$ and solve for auxiliary variables $\mathbf{p}_i$ independently
+    \begin{equation*}
+     \min_{\mathbf{p}_i} \frac{w_i}{2}\|\mathbf{A}_i
+      \mathbf{S}_i\mathbf{q}-\mathbf{B}_i\mathbf{p}_i\|^2_F+\delta_{\mathbf{C}_i}(\mathbf{p}_i)
+    \end{equation*}
+  \item Global solve: fix auxiliary variables and solve for unknown $\mathbf{q}$
+    \begin{equation*}
+     (\frac{\mathbf{M}}{h^2}+\sum_i w_i\mathbf{S}_i^T\mathbf{A}_i^T\mathbf{A}_i\mathbf{S}_i)\mathbf{q}=\frac{\mathbf{M}}{h^2}
+     \mathbf{s}_n + \sum_i w_i\mathbf{S}_i^T\mathbf{A}_i^T\mathbf{B}_i\mathbf{p}_i
+    \end{equation*}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Projective Implicit Euler Solver}
+ \begin{itemize}
+  \item The choice of $\mathbf{A}$ and $\mathbf{B}$
+    \begin{itemize}
+     \item[*] $\mathbf{A}_i=\mathbf{B}_i=\mathbf{I}$, simple but poor convergence rate.
+     \item[*] $\mathbf{A}_i=\mathbf{B}_i$ as differential coordinate matrices whose null space consists of global translation.
+    \end{itemize}
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{pic/algorithm.png}
+  \end{figure}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Position Dynamics View}
+ \begin{itemize}
+  \item PBD actually implements a Gauss-Seidel type minimization on energy
+    \begin{equation*}
+     \frac{1}{2} \sum_i \|\mathbf{M}^{\frac{1}{2}}(\mathbf{S}_i\mathbf{q}-\mathbf{p}_i)\|^2_F+ \delta_{C_i}(\mathbf{p}_i)
+    \end{equation*}
+  \item Jacobi solver.
+    \begin{itemize}
+     \item[*] incompatible constraints.
+     \item[*] efficient parallelization.
+    \end{itemize}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Continuum-Based Constraints}
+ \textbf{Strain}. For 2-manifold surface
+    \begin{itemize}
+     \item Continuous energy
+      \begin{equation*}
+	E(\mathbf{f}, \mathbf{T})=\frac{w}{2}\int_S\|\nabla_S \mathbf{f}-\mathbf{T}\nabla_S \mathbf{g}\|^2_F
+	+\delta_M(\mathbf{T})dA
+      \end{equation*}
+     \item Discrete potential
+      \begin{equation*}
+	W(\mathbf{q}, \mathbf{T})=\frac{w}{2}A\|\mathbf{X_fX_g}^{-1}-\mathbf{T}\|^2_F+\delta_M(\mathbf{T})
+      \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Continuum-Based Constraints}
+ \textbf{Bending}.
+  \begin{itemize}
+   \item Continuous energy.
+   \begin{equation*}
+    E(\mathbf{f}, \mathbf{R})=\frac{w}{2}\int_S\|\Delta_S\mathbf{f}-\mathbf{R}\Delta_S\mathbf{g}\|^2_2
+    +\delta_{SO(3)}(\mathbf{R})dA
+   \end{equation*}
+   \item Discrete potential
+   \begin{equation*}
+    W(\mathbf{q}, \mathbf{R})=\frac{w}{2}A\|\mathbf{X_fc}-\mathbf{RX_gc}\|^2_2+\delta_{SO(3)}(\mathbf{R})
+   \end{equation*}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
  \frametitle{Conclusion}
+ %\TikzDraw{
+    %\visible<1> {\node at (2,-2) {\parbox[t]{\textwidth}{
+     %   \Large$\pi(x_1) = \pi(x_2) = x$}
+     % }; 
+    %}
+   % \visible<1> {\node at (7, -3) {\parbox[t]{\textwidth}{
+    %      $\alpha\circ \tau = -\alpha\\ cos(\alpha)=cos(-\alpha)$
+    %    }};
+   % }
+ %}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conclusion}
   \begin{itemize}
    \item handling non-linearity.
    \item discontinuous galerkin.
