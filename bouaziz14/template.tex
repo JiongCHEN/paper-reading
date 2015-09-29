@@ -1,4 +1,5 @@
 \documentclass[serif,mathserif]{beamer}
+\usepackage{etex}
 \usepackage{amsmath, amsfonts, epsfig, xspace}
 \usepackage{algorithm,algorithmic}
 \usepackage{pstricks,pst-node}
@@ -203,27 +204,41 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
- \frametitle{Conclusion}
- %\TikzDraw{
-    %\visible<1> {\node at (2,-2) {\parbox[t]{\textwidth}{
-     %   \Large$\pi(x_1) = \pi(x_2) = x$}
-     % }; 
-    %}
-   % \visible<1> {\node at (7, -3) {\parbox[t]{\textwidth}{
-    %      $\alpha\circ \tau = -\alpha\\ cos(\alpha)=cos(-\alpha)$
-    %    }};
-   % }
- %}
-\end{frame}
+%\begin{frame}
+% \frametitle{Conclusion}
+% \TikzDraw {
+%   \visible<1-> { \node at (-1,1) 
+%     {\includegraphics[scale=0.2]{pic/algorithm.png}}; 
+%   }
+%   \visible<1> {\node at (2,-2) 
+%     {\parbox[t]{\textwidth}{\Large$\pi(x_1) = \pi(x_2) = x$}}; 
+%   }
+%   \visible<1> {\node at (7, -3) 
+%     {\parbox[t]{\textwidth}{$\alpha\circ \tau = -\alpha\\ cos(\alpha)=cos(-\alpha)$}};
+%   }
+% }
+% \gridlines
+%\end{frame}
 
+\begin{frame}
+  \frametitle{Comparison}
+  \begin{figure}[t]
+  \centering
+  \includegraphics[height=5cm,width=11cm]{pic/comparison.png}
+  \end{figure}
+\end{frame}
+  
 \begin{frame}
   \frametitle{Conclusion}
   \begin{itemize}
-   \item handling non-linearity.
-   \item discontinuous galerkin.
+   \item Handling nonlinearity.
    \item mesh dependent.
   \end{itemize}
 \end{frame}
+
+\begin{frame} 
+ \centering \Huge{Thanks!}
+\end{frame}
+
 
 \end{document}
