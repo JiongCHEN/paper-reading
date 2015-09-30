@@ -39,6 +39,28 @@
   \end{figure}
 \end{frame}
 
+\begin{frame}
+ \frametitle{Limitation of PBD}
+ \begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.25]{pic/pbd_artifact.png}
+ \end{figure}
+ \TikzDraw {
+   \visible<1> { \node at (-2.2,-2) 
+     {\parbox[t]{0.5\textwidth}{12ms/frame}}; 
+   }
+    \visible<1> { \node at (0.5,-2) 
+     {\parbox[t]{0.5\textwidth}{61ms/frame}}; 
+   }
+    \visible<1> { \node at (3.1,-2) 
+     {\parbox[t]{0.5\textwidth}{121ms/frame}}; 
+   }
+    \visible<1> { \node at (5.8,-2) 
+     {\parbox[t]{0.5\textwidth}{240ms/frame}}; 
+   }
+ }
+\end{frame}
+
 % \section{Main Body} % add these to see outline in slides
 
 \begin{frame}
@@ -56,7 +78,6 @@
   \begin{equation*}
    E(\mathbf{x}) = T(\mathbf{x},t)+\min_{\mathbf{d}}\frac{1}{2}\sum_{i=1}^s k_i\|\mathbf{p}_{i_1}-\mathbf{p}_{i_2}-\mathbf{d}_i\|^2+V_{other}(\mathbf{x})
   \end{equation*}
-
   \end{itemize}
 \end{frame}
 
@@ -245,7 +266,13 @@
   \frametitle{Conclusion}
   \begin{itemize}
    \item Handling nonlinearity.
+   \item Improve convergence rate.
    \item Meshing independence.
+    \TikzDraw {
+     \visible<2-> { \node at (3,0) 
+     {\includegraphics[height=6cm,width=5cm]{pic/meshing_dependence.png}}; 
+   }
+  }
   \end{itemize}
 \end{frame}
 
