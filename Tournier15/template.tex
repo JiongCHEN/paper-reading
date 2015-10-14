@@ -1,0 +1,85 @@
+\documentclass[serif,mathserif]{beamer}
+\usepackage{etex}
+\usepackage{amsmath, amsfonts, epsfig, xspace}
+\usepackage{algorithm,algorithmic}
+\usepackage{pstricks,pst-node}
+\usepackage{multimedia}
+\usepackage[normal,tight,center]{subfigure}
+\setlength{\subfigcapskip}{-.5em}
+\usepackage{beamerthemesplit}
+\usetheme{lankton-keynote}
+\usepackage{color}
+\input{preamble.tex}
+
+\author[Jiong Chen]{Jiong Chen}
+
+\title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{Stable Constrained Dynamics}
+
+\date{September 30, 2015} %leave out for today's date to be insterted
+
+% \institute{Zhejiang University}
+
+\newcommand{\BOLD}[1]{\mathbf{#1}}
+\definecolor{DARK}{RGB}{45, 33, 73}
+\definecolor{LIGHT}{RGB}{119, 52, 106}
+\definecolor{TEXTLIGHT}{RGB}{213, 207, 229}
+\definecolor{TEXTDARK}{RGB}{66, 66, 66}
+\definecolor{BULLET}{RGB}{179, 17, 102}
+\definecolor{EM}{RGB}{179,17,102}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+ \frametitle{Introduction to Time Integration}
+ \begin{itemize}
+  \item Explicit Euler
+    \begin{eqnarray*}
+     \BOLD{v}_+ &=& \BOLD{v} + h\BOLD{a} \\
+     \BOLD{x}_+ &=& \BOLD{x} + h\BOLD{v}
+    \end{eqnarray*}
+  \item Symplectic Euler
+   \begin{eqnarray*}
+     \BOLD{v}_+ &=& \BOLD{v} + h\BOLD{a} \\
+     \BOLD{x}_+ &=& \BOLD{x} + h\BOLD{v}_+
+    \end{eqnarray*}
+  \item Implicit Euler
+    \begin{eqnarray*}
+     \BOLD{v}_+ &=& \BOLD{v} + h\BOLD{a}_+ \\
+     \BOLD{x}_+ &=& \BOLD{x} + h\BOLD{v}_+
+    \end{eqnarray*}
+ \end{itemize}
+ \TikzDraw {
+  \visible<2> {
+    \node [fill=BULLET!50, draw=black!50, rounded corners=3mm, text opacity=1, fill opacity=0.7] at (0.3, -2.8) {\Huge \color{yellow}$(\BOLD{M}-h^2\BOLD{K})\BOLD{v}_+=\BOLD{p}+h\BOLD{f}$};
+  }
+ }
+ %\gridlines
+\end{frame}
+
+%\begin{frame}
+% \frametitle{Conclusion}
+% \TikzDraw {
+%   \visible<1-> { \node at (-1,1) 
+%     {\includegraphics[scale=0.2]{pic/algorithm.png}}; 
+%   }
+%   \visible<1> {\node at (2,-2) 
+%     {\parbox[t]{\textwidth}{\Large$\pi(x_1) = \pi(x_2) = x$}}; 
+%   }
+%   \visible<1> {\node at (7, -3) 
+%     {\parbox[t]{\textwidth}{$\alpha\circ \tau = -\alpha\\ cos(\alpha)=cos(-\alpha)$}};
+%   }
+% }
+% \gridlines
+%\end{frame}
+
+\begin{frame} 
+  \TikzDraw {
+    \node at (0, 0.5) {\Huge{Thanks!}};
+  }
+  %\gridlines
+\end{frame}
+
+
+\end{document}
