@@ -20,6 +20,8 @@
 % \institute{Zhejiang University}
 
 \newcommand{\BOLD}[1]{\mathbf{#1}}
+\newcommand{\PDIF}[2]{\frac{\partial #1}{\partial #2}}
+
 \definecolor{DARK}{RGB}{45, 33, 73}
 \definecolor{LIGHT}{RGB}{119, 52, 106}
 \definecolor{TEXTLIGHT}{RGB}{213, 207, 229}
@@ -66,7 +68,55 @@
 
 \begin{frame}
  \frametitle{Hard Constraints}
- 
+ \begin{itemize}
+  \item E.g. model thin inextensible objects 
+  \begin{figure}
+    \centering 
+    \includegraphics[scale=0.2]{img/inextensible.png}
+  \end{figure}
+  \item Lagrange function
+    \begin{equation*}
+      \mathcal{L}(t, \BOLD{x}, \BOLD{\dot x}, \BOLD{\lambda}) = \frac{1}{2}\BOLD{\dot x^T M \dot x} - V(\BOLD{x}) - \sum_i \lambda_i \phi(\BOLD{x})
+    \end{equation*}
+ \end{itemize}
+ %\gridlines 
+\end{frame}
+
+\begin{frame}
+ \frametitle{Hard Constraints}
+ \begin{itemize}
+    \item Euler-Lagrange equation
+    \begin{equation*}
+      \PDIF{\mathcal{L}}{\BOLD{x}}-\frac{d}{dt}\PDIF{\mathcal{L}}{\BOLD{\dot x}} = 0
+      \Longrightarrow \BOLD{M\ddot x} = -\PDIF{V}{\BOLD{x}}-\BOLD{J^T\lambda}
+    \end{equation*}
+    \pause
+    \TikzDraw {
+      \visible<2> {
+	\draw[red, very thick] (2.2, 1.2) circle (0.6cm);
+	\draw[red, very thick] (3.6, 1.2) circle (0.6cm);
+	\node at (2, 0.2) { \color{green!50} elastic force};
+	\node at (4, 2.2) { \color{green!50} constraint force};
+      }
+    }
+    \pause
+    \item Linearization 
+    \begin{equation*}
+      \begin{pmatrix}
+	\BOLD{M}-h^2\BOLD{K} & -\BOLD{J}^T \\
+	\BOLD{J} & 0
+      \end{pmatrix}
+      \begin{pmatrix}
+       \BOLD{v}_{+} \\ \BOLD{\mu}_{+}
+      \end{pmatrix}
+      =
+      \begin{pmatrix}
+       \BOLD{0} \\ \BOLD{0}
+      \end{pmatrix}
+    \end{equation*}
+    \pause
+ \end{itemize}
+ \gridlines 
 \end{frame}
 
 
