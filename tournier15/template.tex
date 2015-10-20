@@ -34,6 +34,10 @@
 \maketitle
 
 \begin{frame}
+ \frametitle{Motivation}
+\end{frame}
+
+\begin{frame}
  \frametitle{Introduction to Time Integration}
  \begin{itemize}
   \item Explicit Euler
@@ -93,8 +97,8 @@
     \pause
     \TikzDraw {
       \visible<2> {
-	\draw[red, very thick] (2.3, 1.2) circle (0.6cm);
-	\draw[red, very thick] (3.4, 1.2) circle (0.6cm);
+	\draw[red, very thick] (2.3, 1.15) circle (0.6cm);
+	\draw[red, very thick] (3.4, 1.15) circle (0.6cm);
 	\node at (2, 0.3) { \color{green!50} elastic force};
 	\node at (4, 2.15) { \color{green!50} constraint force};
       }
@@ -111,20 +115,74 @@
       \end{pmatrix}
       =
       \begin{pmatrix}
-       \BOLD{0} \\ \BOLD{0}
+       \BOLD{p}+h\BOLD{f} \\ \BOLD{\psi}
       \end{pmatrix}
     \end{equation*}
-    \pause
     \TikzDraw {
-      \draw[red, very thick] (-2.5, -0.7)--(-2.5, -2.2)--(0.9, -2.2)--(0.9, -0.7)--(-2.5, -0.7);
-      \node at (-0.7, -2.6) {\huge\color{green!50}  KKT};
+      \visible<3> {
+	\node [fill=DARK!50, draw=black!50, rounded corners=3mm, text opacity=1, fill opacity=0.7] at (0.3, -2.8) {\Large\color{yellow}$\BOLD{\mu}=h\lambda$};
+      }
+      \visible<4> {
+	\draw[red, very thick] (-3, -0.7)--(-3, -2.2)--(0.4, -2.2)--(0.4, -0.7)--(-3, -0.7);
+	\node at (-1.2, -2.6) {\huge\color{green!50}  KKT};
+      }
     }
  \end{itemize}
  %\gridlines 
+ \end{frame}
+
+\begin{frame}
+ \frametitle{Compliant Constraints: Regularization}
+ \begin{itemize}
+  \item constraints$\rightarrow$elasticity
+  \begin{equation*}
+   V=\frac{1}{2}\BOLD{\phi(x)}^T\BOLD{C^{-1}\phi(x)}
+  \end{equation*}
+  \item resulting force
+  \begin{equation*}
+   \BOLD{f}_c = -\BOLD{J}^T\BOLD{C^{-1}\phi(x)}
+  \end{equation*}
+  \pause
+  \TikzDraw {
+    \draw (-0.2, -0.45) node[circle, inner sep=0.15cm, fill=none, draw=red, very thick] (E) {};
+    \draw (1.19, -0.45) node[circle, inner sep=0.6cm, fill=none, draw=red, very thick] (F) {};
+    \draw (3.5, -1.5) node[circle, inner sep=0.2cm, fill=none, draw=red, very thick] (G) {\Huge \color{green!50} $\lambda$};
+    \draw[red, very thick, ->] (E) to [bend right=45] (G);
+    \draw[red, very thick, ->] (F) to [bend left=45] (G);
+  }
+  \pause
+  \item dynamic system
+  \begin{eqnarray*}
+    \BOLD{M\ddot{x}} &=& \BOLD{f}_{ext}+\BOLD{J}^T\BOLD{\lambda} \\
+    \BOLD{C\lambda} &=& -\BOLD{\phi}
+  \end{eqnarray*}
+ \end{itemize}
+ %\gridlines
 \end{frame}
 
 \begin{frame}
- \frametitle{Compliant Constraints: a Regulariztion}
+ \frametitle{Compliant Constraints: Regularization}
+ \begin{itemize}
+  \item backward integration
+    \begin{equation*}
+     \begin{pmatrix}
+      \BOLD{M} & -\BOLD{J}^T \\
+      \BOLD{J} & \frac{1}{h^2}\BOLD{C}
+     \end{pmatrix}
+     \begin{pmatrix}
+      \BOLD{v}_+ \\ \BOLD{\mu}_+
+     \end{pmatrix}
+     =
+     \begin{pmatrix}
+      \BOLD{p}+h\BOLD{f}_e \\ -\frac{1}{h}\BOLD{\phi}
+     \end{pmatrix}
+    \end{equation*}
+  \item Schur complement
+    \begin{equation*}
+      (\BOLD{JM}^{-1}\BOLD{J}^T + \frac{1}{h^2}\BOLD{C})\BOLD{\mu}_+ = -\frac{1}{h}\BOLD{\phi}-\BOLD{JM}^{-1}(\BOLD{p}+h\BOLD{f}_e)
+    \end{equation*}
+ \end{itemize}
+
 \end{frame}
 
 \begin{frame}
@@ -140,6 +198,25 @@
  \end{equation*}
 \end{frame}
 
+\begin{frame}
+ \frametitle{Stiffness Splitting}
+ \TikzDraw {
+  \node [fill=DARK!50, draw=black!50, rounded corners=3mm, text opacity=1, fill opacity=0.7] at (0, 0) {
+    \parbox[t]{0.7\textwidth}{
+      \begin{eqnarray*}
+	V &=& \frac{1}{2}\BOLD{\phi(x)}^T\BOLD{C}^{-1}\BOLD{\phi(x)} \\
+	\BOLD{f} &=& -\PDIF{V}{\BOLD{x}}^T = -\PDIF{\BOLD{\phi}}{\BOLD{x}}^T\PDIF{V}{\BOLD{\phi}}^T = \BOLD{J}^T\BOLD{\lambda} \\
+	\BOLD{K} &=& \PDIF{\BOLD{f}}{\BOLD{x}} = \BOLD{J}^T\PDIF{\BOLD{\lambda}}{\BOLD{\phi}}\BOLD{J}+\color{yellow}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda} \\
+	\color{yellow}\tilde{\BOLD{K}} &\color{yellow}=& \color{yellow}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda}
+      \end{eqnarray*}
+    }
+  };
+ }
+\end{frame}
+
+\begin{frame}
+ \frametitle{Stiffness Splitting}
+\end{frame}
 
 %\begin{frame}
 % \frametitle{Conclusion}
@@ -156,6 +233,22 @@
 % }
 % \gridlines
 %\end{frame}
+
+\begin{frame}
+ \frametitle{Results}
+ \begin{figure}
+  \centering
+  \includegraphics[scale=0.25]{img/cables.png}
+ \end{figure}
+ \begin{figure}
+  \centering
+  \includegraphics[scale=0.25]{img/statistics.png}
+ \end{figure}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Conclusion}
+\end{frame}
 
 \begin{frame} 
   \TikzDraw {
