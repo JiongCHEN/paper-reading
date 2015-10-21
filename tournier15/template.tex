@@ -34,7 +34,25 @@
 \maketitle
 
 \begin{frame}
- \frametitle{Motivation}
+ \frametitle{Background and Motivation}
+ \begin{itemize}
+  \item Two main approaches to simulate deformable bodies
+    \begin{itemize}
+     \item \color{red}Elasticity, for soft to moderately stiff objects
+     \item \color{green}Constraints, for objects with high stiffness
+    \end{itemize}
+  \item Limitations of two approaches
+    \begin{itemize}
+      \item \color{red} Elasticity: numerically hard as stiffness increases
+      \item \color{green} Constraints: instabilities in the nullspace directions
+    \end{itemize}
+  \item Missing piece?
+  \pause
+  \TikzDraw {
+    \node [fill=DARK!50, draw=black!50, rounded corners=3mm, text opacity=1, fill opacity=0.7] at (-0.1, -2.9) {\huge\color{yellow}\textit{Geometric Stiffness}};
+  }
+ \end{itemize}
+
 \end{frame}
 
 \begin{frame}
@@ -115,7 +133,7 @@
       \end{pmatrix}
       =
       \begin{pmatrix}
-       \BOLD{p}+h\BOLD{f} \\ \BOLD{\psi}
+       \BOLD{p}+h\BOLD{f} \\ \BOLD{0}
       \end{pmatrix}
     \end{equation*}
     \TikzDraw {
@@ -163,7 +181,11 @@
 \begin{frame}
  \frametitle{Compliant Constraints: Regularization}
  \begin{itemize}
-  \item backward integration
+  \item Notice
+  \begin{equation*}
+   \BOLD{C\lambda}_+ = \BOLD{C}\frac{\mu_+}{h}=-\BOLD{\BOLD{\phi}}_+\approx-\BOLD{\phi}-h\BOLD{Jv}_+
+  \end{equation*}
+  \item Backward integration
     \begin{equation*}
      \begin{pmatrix}
       \BOLD{M} & -\BOLD{J}^T \\
