@@ -165,7 +165,7 @@
  \begin{itemize}
   \item constraints$\rightarrow$elasticity
   \begin{equation*}
-   V=\frac{1}{2}\BOLD{\phi(x)}^T\BOLD{{\color{BULLET}{C}}^{-1}\phi(x)}
+   V=\frac{1}{2}\BOLD{\phi(x)}^T\BOLD{{\color{orange}{C}}^{-1}\phi(x)}
   \end{equation*}
   \item resulting force
   \begin{equation*}
@@ -232,9 +232,9 @@
     \end{equation*}
   \pause
   \TikzDraw {
-    \node at (-0.4, -0.5) {\huge \color{red} $\neq \PDIF{\BOLD{f}_c}{\BOLD{x}}$};
+    \node at (-0.4, -0.4) {\huge \color{red} $\neq \PDIF{\BOLD{f}_c}{\BOLD{x}}$};
   }
-  \item Eliminate part of nonlinearity through substitution.
+  \item Eliminate a part of nonlinearity through \textit{\color{yellow}variable substitution}. WHAT IS IT? HOW IT HELP?
  \end{itemize}
 \end{frame}
 
@@ -251,14 +251,14 @@
 
 \begin{frame}
  \frametitle{Stable Constraints}
- Geometric Stiffness
+ {\color{green}Geometric Stiffness} \& {\color{red}Material Stiffness}
  \begin{figure}[h]
   \centering
   \includegraphics[scale=0.2]{img/geo_stiff.png}
  \end{figure}
- spring potential: $V=\frac{k}{2}(\bar{l}-l)^2$, $l=\|\BOLD{x}_i-\BOLD{x}_j\|$ 
+ Spring potential: $V=\frac{k}{2}(\bar{l}-l)^2$, $l=\|\BOLD{x}_i-\BOLD{x}_j\|$ 
  \begin{equation*}
-  \PDIF{\BOLD{f}_j}{\BOLD{x}_i}=\PDIF{\BOLD{f}_i}{\BOLD{x}_j}=-\PDIF{\BOLD{f}_i}{\BOLD{x}_i}=-\PDIF{\BOLD{f}_j}{\BOLD{x}_j}=k\BOLD{uu}^T-\frac{k(\bar l-l)}{l}(\BOLD{I_3}-\BOLD{uu}^T)
+  \PDIF{\BOLD{f}_j}{\BOLD{x}_i}=\PDIF{\BOLD{f}_i}{\BOLD{x}_j}=-\PDIF{\BOLD{f}_i}{\BOLD{x}_i}=-\PDIF{\BOLD{f}_j}{\BOLD{x}_j}={\color{red}k\BOLD{uu}^T}\color{green}-\frac{k(\bar l-l)}{l}(\BOLD{I_3}-\BOLD{uu}^T)
  \end{equation*}
 \end{frame}
 
@@ -270,8 +270,8 @@
       \begin{eqnarray*}
 	V &=& \frac{1}{2}\BOLD{\phi(x)}^T\BOLD{C}^{-1}\BOLD{\phi(x)} \\
 	\BOLD{f} &=& -\PDIF{V}{\BOLD{x}}^T = -\PDIF{\BOLD{\phi}}{\BOLD{x}}^T\PDIF{V}{\BOLD{\phi}}^T = \BOLD{J}^T\BOLD{\lambda} \\
-	\BOLD{K} &=& \PDIF{\BOLD{f}}{\BOLD{x}} = \BOLD{J}^T\PDIF{\BOLD{\lambda}}{\BOLD{\phi}}\BOLD{J}+\color{yellow}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda} \\
-	\color{yellow}\tilde{\BOLD{K}} &\color{yellow}=& \color{yellow}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda}
+	\BOLD{K} &=& \PDIF{\BOLD{f}}{\BOLD{x}} = {\color{red}\BOLD{J}^T\PDIF{\BOLD{\lambda}}{\BOLD{\phi}}\BOLD{J}}+\color{green}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda} \\
+	\color{green}\tilde{\BOLD{K}} &\color{green}=& \color{green}\PDIF{\BOLD{J}}{\BOLD{x}}^T\BOLD{\lambda}
       \end{eqnarray*}
     }
   };
@@ -320,6 +320,7 @@
   \item {\color{red}Stiffness} vs. {\color{green}Compliance}
   \item {\color{red}Elasticity} vs. {\color{green}Constraints}
   \item Switch between them, to make the matrix well conditioned.
+  \item Generalization? Fast mass spring, ARAP, projective dynamics...
  \end{itemize}
 \end{frame}
 
