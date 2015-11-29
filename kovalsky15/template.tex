@@ -22,11 +22,14 @@
 % \institute{Zhejiang University}
 
 \newcommand{\BOLD}[1]{\mathbf{#1}}
+\newcommand{\BOLDG}[1]{\boldsymbol{#1}}
 \newcommand{\PDIF}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\TODO}[1]{\textcolor{red}{#1}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\min}}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\cond}{cond}
 \DeclareMathOperator{\ST}{s.t.}
+\DeclareMathOperator{\diag}{diag}
 
 \definecolor{DARK}{RGB}{45, 33, 73}
 \definecolor{LIGHT}{RGB}{119, 52, 106}
@@ -82,8 +85,127 @@
 
 \begin{frame}
  \frametitle{Algorithmic details}
+ \begin{enumerate}
+  \item \textit{\textbf{Project}} the lifted variable $\BOLD{z}_n=T\BOLD{x}_n$ onto $\mathcal{D}$, \textit{i.e.}, compute $\prod_\mathcal{D}(\BOLD{z}_n)$.
+  \item Form $\mathcal{H}_n$ to be the \textbf{\textit{hyperplane}} orthogonal to the projection vector $\BOLD{z}_n-\prod_\mathcal{D}(\BOLD{z}_n)$.
+  \item \textbf{\textit{Optimize}} with $(\BOLD{x}_*, \BOLD{x}_0)=(\BOLD{x}_{n+1}, \BOLD{x}_n)$.
+ \end{enumerate}
 \end{frame}
 
+\begin{frame}
+ \frametitle{Projection}
+ \begin{itemize}
+  \item Separable projection
+  \begin{equation*}
+   \prod_\mathcal{D}(\BOLD{z})=
+   \begin{pmatrix}
+    \prod_{\mathcal{D}_1}(T_1\BOLD{x}) \\
+    \vdots \\
+    \prod_{\mathcal{D}_m}(T_m\BOLD{x})
+   \end{pmatrix}
+  \end{equation*}
+  \item Compute $\prod_{\mathcal{D}_j}(T_j\BOLD{x})=\prod_{\mathcal{D}^K}(T_j\BOLD{x})$
+  \item Let $C=U\diag(\sigma_1, \dots, \sigma_d)V^T$ with $\sigma_1\ge \dots \ge \sigma_{d-1} \ge |\sigma_d|$
+  \visible<1> {
+  \begin{equation*}
+  \boxed{
+  \begin{aligned}
+   &\prod_{\mathcal{D}^K}(C) = U\diag(\tau^*_1, \dots, \tau^*_d)V^T \\
+   &\{\tau^*_i\} = \argmin_{\{\tau_i\}}\sum_{i=1}^d(\sigma_i-\tau_i)^2 \\
+   &\ST ~~\tau_1 \le K\tau_d
+  \end{aligned}}
+  \end{equation*}
+  }
+  \pause
+  \TikzDraw {
+    \visible<2> { 
+      \node at (-1.2, -2.25) {$\boxed{\|\prod_\mathcal{D}(\BOLD{z})\|_2 \le \|\BOLD{z}\|_2}$ };
+      \node at (2, -2.5) {\includegraphics[scale=0.2]{img/proj}};
+    }
+  }
+ \end{itemize}
+ %\gridlines
+\end{frame}
+
+\begin{frame}
+ \frametitle{Hyperplane}
+ \begin{itemize}
+  \item The proxy hyperplane
+    \begin{itemize}
+     \item[-] Passes through the projection $\prod_\mathcal{D}(\BOLD{z}_0)$.
+     \item[-] Orthogonal to the projection direction $\BOLD{n}_0=\BOLD{z}_0-\prod_\mathcal{D}(\BOLD{z}_0)$.
+    \end{itemize}
+  \item 
+  \begin{equation*}
+    \boxed{
+    T\BOLD{x}\in \mathcal{H}_0 \Rightarrow \BOLD{n}_0^T(T\BOLD{x}-\prod_\mathcal{D}(T\BOLD{x}_0)) = 0
+    }
+  \end{equation*}
+  \visible<1>{\item $\mathcal{H}$ provides a good linear proxy for $\mathcal{D}$ at $\prod_\mathcal{D}(\BOLD{z})$ with tangent-like properties. \TODO{HOW GOOD?}}
+  \pause
+  \TikzDraw {
+    \visible<2>{
+      \node at (-1.2, -2.6) {\parbox{0.8\textwidth}{
+	\begin{equation*}
+	\boxed{
+	 \begin{aligned}
+	   &<\BOLD{n}_0, \BOLDG{\xi}> \le 0 \\
+	   &\quad\BOLDG{\xi} = \gamma_+^{\prime}(0)
+	 \end{aligned}}
+	\end{equation*}
+      }};
+      \node at (1.5, -2.7) {\includegraphics[scale=0.2]{img/hyper}};
+    }
+  }
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Optimize: a linear solve}
+ \begin{itemize}
+  \item Iteration $\Rightarrow$ solving a \textit{linearly constrained least squares problem}
+  \item KKT linear system 
+  \begin{equation*}
+   \begin{pmatrix}
+    T^TT & A^T & T^T\BOLD{n}_0 \\
+    A & 0 & 0 \\
+    \BOLD{n}_0^TT & 0 & 0
+   \end{pmatrix}
+   \begin{pmatrix}
+    \BOLD{x} \\
+    \BOLDG{\lambda} \\
+    \mu
+   \end{pmatrix}
+   =
+   \begin{pmatrix}
+    T^TT\BOLD{x}_0 \\
+    \BOLD{b} \\
+    \BOLD{n}_0^T\prod_\mathcal{D}(\BOLD{z}_0)
+   \end{pmatrix}
+  \end{equation*}
+  \pause
+  \item Schur complement
+  \begin{equation*}
+   \BOLDG{\eta}_0M^{-1}\BOLDG{\eta}_0\mu = -d_0+\BOLDG{\eta}_0M^{-1}\BOLD{c}_0
+  \end{equation*}
+  \TODO{Only need two back-substitutions}
+ \end{itemize}
+ \TikzDraw {
+  \visible<2>{
+    \draw[dashed, red, very thick](-3.2, 0.35)--(0, 0.35);
+    \draw[dashed, red, very thick](0.4, 0.35)--(1.1, 0.35);
+    \draw[dashed, red, very thick](1.8, 0.35)--(4.1, 0.35);
+    \draw[dashed, red, very thick](-1.3, 1.3)--(-1.3, -0.2);
+    \node at (-2.18, 0.75) {\TODO{$M$}};
+    \node at (-0.6, 0.75) {\TODO{$\BOLDG{\eta}_0$}};
+    \node at (-2.18, 0.1) {\TODO{$\BOLDG{\eta}^T_0$}};
+    \node at (3, 0.75) {\TODO{$\BOLD{c}_0$}};
+    \node at (3, 0.1) {\TODO{$d_0$}};
+  }
+ }
+ %\gridlines
+\end{frame}
 
 \begin{frame}
  \frametitle{Evaluation: performance}
