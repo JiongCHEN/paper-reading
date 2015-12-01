@@ -7,6 +7,7 @@
 \usepackage[normal,tight,center]{subfigure}
 \usepackage{beamerthemesplit}
 \usepackage{color}
+\usepackage{mdframed}
 
 \setlength{\subfigcapskip}{-.5em}
 \usetheme{lankton-keynote}
@@ -25,11 +26,14 @@
 \newcommand{\BOLDG}[1]{\boldsymbol{#1}}
 \newcommand{\PDIF}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\TODO}[1]{\textcolor{red}{#1}}
+\newcommand{\TODOB}[1]{\textcolor{blue}{#1}}
 \newcommand{\argmin}{\operatornamewithlimits{arg\min}}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\cond}{cond}
 \DeclareMathOperator{\ST}{s.t.}
 \DeclareMathOperator{\diag}{diag}
+
+\newmdtheoremenv{theo}{Theorem}
 
 \definecolor{DARK}{RGB}{45, 33, 73}
 \definecolor{LIGHT}{RGB}{119, 52, 106}
@@ -68,7 +72,7 @@
 \begin{frame}
  \frametitle{Problems statement}
  \begin{itemize}
-  \item Nonlinear bounded distortion constraints $\Rightarrow$ difficult \& computationally demanding
+  \item Non-linear and non-convex problem $\Rightarrow$ difficult \& computationally demanding
   \item Numerical methods: first-order \& second order
   \item Second order: interior point solver \& Newton variants
   \item First order 
@@ -77,10 +81,51 @@
      \item[-] \textcolor{green!50!black}{Gauss-Newton for least squares}
     \end{itemize}
  \end{itemize}
+ \visible<2> {
+  \TikzDraw {
+    \draw[->, red, very thick] (-3.8, -1.2) parabola (-2, -2.4);
+    \draw[->, green!50!black, very thick] (-3.8, -1.9) parabola (-2, -2.4);
+    \node [fill=blue!20, draw=white, rounded corners=1mm, text opacity=1, fill opacity=10] at (-0.1, -2.8) {\Large Efficiency \& Scalability};
+  }
+ }
+ %\gridlines
 \end{frame}
 
 \begin{frame}
  \frametitle{Approach}
+ \TikzDraw {
+  \node at (-2.7, 0) { \includegraphics[scale=0.2]{img/solve} };
+  \draw[fill=red] (-4.36, -1.2) circle (3pt);
+  \draw[red, very thick] (-3.6, 0.18) -- (-3.8, 0) -- (-3.64, -0.18);
+  \visible<2-> {
+    \node at (3, 0) {\parbox[t]{0.5\textwidth}{
+      Pythagorean theorem
+      \begin{equation*}
+      \begin{split}
+	&\|T\BOLD{x}-T\BOLD{x}_0\|_2^2=\|T\BOLD{x}-\prod_\mathcal{D}(T\BOLD{x}_0)\|^2_2 \\
+	&+\|\prod_\mathcal{D}(T\BOLD{x}_0)-T\BOLD{x}_0\|_2^2
+      \end{split}
+      \end{equation*}
+      \begin{equation*}
+       \boxed {
+	\begin{aligned}
+	 &\BOLD{x}_* = \argmin_\BOLD{x} \|T\BOLD{x}-\prod_\mathcal{D}(T\BOLD{x}_0)\|_2 \\
+	 &\quad\quad ~~\ST A\BOLD{x} = \BOLD{b} \\
+	 &\quad\quad\quad\quad\quad T\BOLD{x} \in \mathcal{H}_0
+	\end{aligned}
+       }
+      \end{equation*}
+     }
+    };
+  }
+ }
+ \visible<3> {
+  \TikzDraw {
+    \draw[red, very thick] (1.8, -2) -- (3.8, -2.6);
+    \node at (4, -3.1) {\TODO{Alternating optimization}};
+  }
+ }
+ %\gridlines
 \end{frame}
 
 \begin{frame}
@@ -189,7 +234,7 @@
   \begin{equation*}
    \BOLDG{\eta}_0M^{-1}\BOLDG{\eta}_0\mu = -d_0+\BOLDG{\eta}_0M^{-1}\BOLD{c}_0
   \end{equation*}
-  \TODO{Only need two back-substitutions}
+  \TODOB{Only need {\LARGE{\TODO{two}}} back-substitutions}
  \end{itemize}
  \TikzDraw {
   \visible<2>{
@@ -205,6 +250,25 @@
   }
  }
  %\gridlines
+\end{frame}
+
+\begin{frame}
+ \frametitle{Remarks}
+  \begin{theo}
+    If $A$ is full-rank and determines global translation, and if $\BOLD{n}_0 \neq 0$ then the KKT matrix is invertible
+  \end{theo}
+  \begin{itemize}
+    \item Proof. 
+    \begin{enumerate}
+     \item \TODO{$\mathcal{N}(T^TT) \cap \mathcal{N}(A) = \{0\}$} + $A$ is full-rank $\Rightarrow$ $M$ is invertible.
+     \item \TODO{$\BOLD{n}_0^TT \neq 0$} $\Rightarrow$ $\BOLDG{\eta}^T_0$ is full rank + $\mathcal{N}(\BOLDG{\eta}_0^T) \cap \mathcal{N}(M) = \{0\}$
+     $\Rightarrow$ KKT is invertible
+    \end{enumerate}
+  \end{itemize}
+  \begin{itemize}
+   \item Algorithm terminate $\Rightarrow$ feasible solution.
+   \item Infeasible K $\Rightarrow$ no guaranteed termination.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -245,14 +309,15 @@
  \begin{itemize}
   \item Pros:
     \begin{itemize}
-      \item[-] Key: single linear hyperplane $\overset{\text{local}}{\approx}$ set of BD maps
-      \item[-] Comparable computational efficiency to that of alternating optimization
-      \item[-] improved convergence properties 
+      \item[-] Key: single linear hyperplane $\overset{\text{local}}{\approx}$ set of BD maps.
+      \item[-] Parameter free.
+      \item[-] Comparable computational efficiency to that of alternating optimization.
+      \item[-] improved convergence properties. 
     \end{itemize}
   \item Cons:
     \begin{itemize}
-      \item[-] Lacks global convergence guarantees
-      \item[-] Limited to mappings satisfying bounds on distortion
+      \item[-] Lacks global convergence guarantees.
+      \item[-] Limited to mappings satisfying bounds on distortion.
   \end{itemize}
  \end{itemize}
 \end{frame}
