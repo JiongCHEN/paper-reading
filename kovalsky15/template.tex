@@ -85,7 +85,7 @@
   \TikzDraw {
     \draw[->, red, very thick] (-3.8, -1.2) parabola (-2, -2.4);
     \draw[->, green!50!black, very thick] (-3.8, -1.9) parabola (-2, -2.4);
-    \node [fill=blue!20, draw=white, rounded corners=1mm, text opacity=1, fill opacity=10] at (-0.1, -2.8) {\Large Efficiency \& Scalability};
+    \node [fill=EM!80, draw=white, rounded corners=1mm, text opacity=1, fill opacity=10] at (-0.1, -2.8) {\Large \textcolor{white}{Efficiency \& Scalability}};
   }
  }
  %\gridlines
@@ -302,6 +302,13 @@
 
 \begin{frame}
  \frametitle{More examples}
+ \TikzDraw {
+  \visible<2->{\node at (-2.7, -1) {\includegraphics[scale=0.18]{img/res0}};}
+  \visible<1->{\node at (-2.7, 2.8) {\includegraphics[scale=0.18]{img/res1}};}
+  \visible<3->{\node at (3, 0.85) {\includegraphics[scale=0.2]{img/res2}};}
+  \visible<4->{\node at (3.1, -2.9) {\includegraphics[width=5.2cm, height=2cm]{img/res3}};}
+  \visible<5->{\node at (0, 0) {\includegraphics[scale=0.2]{img/res4}};}
+ }
 \end{frame}
 
 \begin{frame}
