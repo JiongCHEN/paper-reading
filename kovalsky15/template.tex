@@ -18,7 +18,7 @@
 
 \title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{Large-Scale Bounded Distortion Mappings}
 
-\date{October 28, 2015} %leave out for today's date to be insterted
+\date{December 9, 2015} %leave out for today's date to be insterted
 
 % \institute{Zhejiang University}
 
@@ -165,7 +165,7 @@
   \TikzDraw {
     \visible<2> { 
       \node at (-1.2, -2.25) {$\boxed{\|\Pi_\mathcal{D}(\BOLD{z})\|_2 \le \|\BOLD{z}\|_2}$ };
-      \node at (2, -2.5) {\includegraphics[scale=0.2]{img/proj}};
+      \node at (2, -2.5) {\includegraphics[scale=0.19]{img/proj}};
     }
   }
  \end{itemize}
@@ -199,7 +199,7 @@
 	 \end{aligned}}
 	\end{equation*}
       }};
-      \node at (1.5, -2.7) {\includegraphics[scale=0.2]{img/hyper}};
+      \node at (1.5, -2.5) {\includegraphics[scale=0.2]{img/hyper}};
     }
   }
  \end{itemize}
@@ -275,12 +275,15 @@
 
 \begin{frame}
  \frametitle{Reproduced result}
- \TikzDraw {
-  \node at (0, 0) {\includegraphics[scale=0.23]{img/kitty}};
-  \node at (-4.2, -1.2) {source mesh};
-  \node at (-0.1, -1.2) {initial mesh};
-  \node at (4.1, -1.2) {$K=1.5$};
+ \TikzDraw { 
+  \visible<1-2> {
+    \node at (0, 0) {\includegraphics[scale=0.23]{img/kitty}};
+    \node at (-4.2, -1.2) {source mesh};
+    \node at (-0.1, -1.2) {initial mesh};
+    \node at (4.1, -1.2) {$K=1.5$};
+  }
   \visible<2>{\node at (0, 0) {\includegraphics[scale=0.2]{img/plot}};}
+  \visible<3>{\node at (-0.2, 0.3) {\includegraphics[scale=0.2]{img/ke}};}
  }
 \end{frame}
 
