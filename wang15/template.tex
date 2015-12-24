@@ -49,21 +49,41 @@
 \begin{frame}
  \frametitle{Background}
  \begin{itemize}
-  \item Projective dynamics:
-  \item Position-based dynamics:
+  \item Projective dynamics \TODO{\textit{[Bouaziz et al. 2014]}}
+  \begin{equation*}
+    \BOLD{x}_{t+1}=\argmin_{\BOLD{x}} \frac{1}{2h^2}\|\sqrt\BOLD{M}(\BOLD{x}-\BOLD{s}_t)\|^2+\sum_c\frac{w_c}{2}\|\BOLD{A}_c\BOLD{x}-\BOLD{\hat A}_c\BOLD{q}_c\|^2+\delta_c(\BOLD{q}_c)
+  \end{equation*}
+  \item Position-based dynamics \TODO{\textit{[M\"uller et al. 2007]}}
+    \begin{itemize}
+     \item[-] Eliminate $\frac{1}{2h^2}\|\sqrt\BOLD{M}(\BOLD{x}-\BOLD{s}_t)\|^2$
+     \item[-] $\BOLD{A}_c = \BOLD{\hat A}_c = \sqrt \BOLD{M}$
+     \item[-] Use Gauss-Seidel to solve the global step
+    \end{itemize}
  \end{itemize}
 \end{frame}
 
 \begin{frame}
  \frametitle{Two Specific Examples}
  \begin{itemize}
-  \item Fast mass spring system
-  \item Geometric elastic model
+  \item Fast mass spring system \TODO{\textit{[Liu et al. 2014]}}
+  \begin{equation*}
+   \begin{split}
+    E(\BOLD{x})=T(\BOLD{x}; \BOLD{x}_t, &\BOLD{v}_t, \BOLD{M}, h)+ \sum_{(i, j)}\frac{w_{i, j}}{2}\|\BOLD{x}_i-\BOLD{x}_j-\BOLD{d}_{i,j}\|^2 \\
+    &\ST \quad \|\BOLD{d}_{i,j}\| = r
+   \end{split}
+  \end{equation*}
+  \item Geometric elastic model \TODO{\textit{[Chao et al. 2010]}}
+  \begin{equation*}
+   \begin{split}
+    E(\BOLD{x})=T(\BOLD{x}; &\BOLD{x}_t, \BOLD{v}_t, \BOLD{M}, h)+ \sum_{t}\frac{w_t}{2}\|\BOLD{F}_t-\BOLD{R}_t\|_F^2 \\
+    &\ST \quad \BOLD{R}_t \in SO(3)
+   \end{split}
+  \end{equation*}
  \end{itemize}
 \end{frame}
 
 \begin{frame}
- \frametitle{Global Solve}
+ \frametitle{Global Solve Strategy}
 \end{frame}
 
 \begin{frame}
