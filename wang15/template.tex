@@ -83,7 +83,23 @@
 \end{frame}
 
 \begin{frame}
- \frametitle{Global Solve Strategy}
+ \frametitle{Solvers for Global Step}
+ \TikzDraw {
+  \node at (-1.75, 0) {\parbox[t]{0.75\textwidth}{
+    \begin{itemize}
+      \item Direct
+      \begin{itemize}
+      \item[-] Relatively expensive 
+      \item[-] Cannot be accelerated by GPU.
+      \end{itemize}
+      \item Jacobi
+      \begin{itemize}
+       \item [-] Highly compatible with GPU.
+      \end{itemize}
+      \item Gauss-Seidel
+    \end{itemize}
+  }};
+ }
 \end{frame}
 
 \begin{frame}
@@ -92,6 +108,41 @@
 
 \begin{frame}
   \frametitle{Chebyshev Approach}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Reproduced Results Summary}
+  Direct+Chebyshev \& One Jacobi+Chebyshev
+  \begin{itemize}
+    \item \TODO{The estimation of $\rho$ has significant impact on the convergence.}
+    \item $\rho_{tet}(0.87375) < \rho_{spring}(0.9992)$
+    \TikzDraw {
+      \visible<2> {
+	\node at (-2.5, -1.3) {\includegraphics[scale=0.12]{img/mass_spring_rot}};
+	\node at (2, -1.3) {\includegraphics[scale=0.12]{img/tet_rot}};
+      }
+    }
+    \pause
+    \pause
+    \item Convergence test condition: $\|\nabla E(\BOLD{x})\|_2 \le 10^{-8}$
+    \item Do accelerate the convergence by at least one order of magnitude.
+    \item Direct+Chebyshev is fastest on CPU.
+    \TikzDraw {
+      \visible<4> {
+	\draw [fill=white, white] (-5, -3) rectangle (5, -0.4);
+	\node at (-1.8, -5) {\includegraphics[scale=0.5]{img/plot}};
+	\node at (2.5, -5) {\includegraphics[scale=0.5]{img/plot1}};
+      }
+    }
+    \pause
+    \pause
+    \item \TODOB{In mass spring, different approaches converged with a little different energy values.} 
+  \end{itemize}
+  %\gridlines
+\end{frame}
+
+\begin{frame}
+ \frametitle{Conclusion}
 \end{frame}
 
 \begin{frame} 
