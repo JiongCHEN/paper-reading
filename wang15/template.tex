@@ -8,6 +8,7 @@
 \usepackage{beamerthemesplit}
 \usepackage{color}
 \usepackage{mdframed}
+\usepackage{pifont}
 
 \setlength{\subfigcapskip}{-.5em}
 \usetheme{lankton-keynote}
@@ -18,7 +19,7 @@
 
 \title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{\huge A Chebyshev Semi-Iterative Approach for Accelerating Projective and Position-based Dynamics}
 
-\date{December 9, 2015} %leave out for today's date to be insterted
+\date{December 29, 2015} %leave out for today's date to be insterted
 
 % \institute{Zhejiang University}
 
@@ -27,6 +28,7 @@
 \newcommand{\PDIF}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\TODO}[1]{\textcolor{red}{#1}}
 \newcommand{\TODOB}[1]{\textcolor{blue}{#1}}
+\newcommand{\TODOG}[1]{\textcolor{green!50!black}{#1}}
 \newcommand{\argmin}{\operatornamewithlimits{arg\min}}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\cond}{cond}
@@ -85,29 +87,109 @@
 \begin{frame}
  \frametitle{Solvers for Global Step}
  \TikzDraw {
-  \node at (-1.75, 0) {\parbox[t]{0.75\textwidth}{
+  \node at (-3.3, 0) {\parbox[t]{0.5\textwidth}{
     \begin{itemize}
       \item Direct
       \begin{itemize}
-      \item[-] Relatively expensive 
-      \item[-] Cannot be accelerated by GPU.
+      \item \TODO{Statble}
+      \item \TODOG{Relatively expensive}
+      \item \TODOG{Cannot be accelerated by GPU}
+      \item \TODOG{Unneeded accuracy}
       \end{itemize}
       \item Jacobi
       \begin{itemize}
-       \item [-] Highly compatible with GPU.
+       \item \TODO{Highly compatible with GPU}
+       \item \TODOG{Unstatble}
       \end{itemize}
       \item Gauss-Seidel
     \end{itemize}
   }};
+  \node at (2.6, 0) {\includegraphics[scale=0.2]{img/diff_ls}};
+  \draw[red] (-0.61, 0.82) rectangle (0.5, 1.2);
  }
+ %\gridlines
 \end{frame}
 
 \begin{frame}
- \frametitle{PD and Jacobi method}
+ \frametitle{PD \& Jacobi Method}
+ \begin{itemize}
+  \item Replace direct solve by one Jacobi iteration.
+  \begin{figure}
+   \centering
+   \includegraphics[scale=0.25]{img/conv_comp}
+  \end{figure}
+  \item \TODO{Explanation: local step is typically stabilized within a few iterations.}
+  \item Accelerate convergence $\Rightarrow$ \textbf{Chebyshev semi-iterative approach}.
+ \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Chebyshev Approach}
+  \frametitle{Chebyshev Semi-Iterative Approach}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Chebyshev for PD}
+ \TikzDraw {
+  \node at (-2.5, 0) {\includegraphics[scale=0.18]{img/performace}};
+  \node at (3.2, -0.17) {\includegraphics[scale=0.2]{img/algorithm}};
+  \draw [fill=white, white] (5.6, -3) rectangle (6.5, 3);
+  \visible<2-> {
+    \node at (3.2, 2.5) {\TODO{\small also work for direct solve and GS}};
+    \draw[->, red] (0.7, 2.25)--(-2.2, 1);
+  }
+  \visible<3> {
+    \node at (3.2, -2.8) {\TODO{\small negligible GPU acceleration for direct}};
+    \draw[->, red] (0.7, -2.58)--(-2.0, -1.2);
+  }
+ }
+ %\gridlines
+\end{frame}
+
+\begin{frame}
+ \frametitle{Issues on Spectral Radius Estimation}
+ \begin{itemize}
+  \item The choice of $\rho$ via pre-simulation
+  \begin{itemize}
+   \item Initialize $\rho$ by $\|\BOLD{e}^{(K)}\|_2/\|\BOLD{e}^{(K-1)}\|_2, \BOLD{e}^{(i)} = \nabla E(\BOLD{x}^{(i)})$.
+   \item Run the simulation multiple times and manually adjust $\rho$ to maximize convergence rate.
+   \item Oscillation occurs$\,\, \Rightarrow \rho \downarrow$.
+  \end{itemize}
+  \item Experimental conclusions
+  \begin{itemize}
+   \item $\rho$ is insensitive to state $\BOLD{x}$ and small changes made to system
+   \item Object stiffness $\uparrow \,\, \Rightarrow \rho \uparrow$.
+   \item Total number of iterations $K \uparrow \,\, \Rightarrow \rho \uparrow$.
+  \end{itemize}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Issues on Convergence\&Robustness}
+ \begin{itemize}
+  \item Divergence issue I
+  \begin{itemize}
+    \item $i \uparrow$, convergence rate drops quickly \& Use constant $\rho$.
+    \item When $K$ is large, $\rho$ is over-estimated for first few iterations.
+    \item Fix strategy: \ding{182}~\TODO{delay Chebyshev;} \ding{183} \TODOG{variant $\rho$.}
+  \end{itemize}
+  \item[]
+  \item Divergence issue II
+  \begin{itemize}
+   \item Jacobi iteration:\quad $\rho(\BOLD{B}^{-1}\BOLD{C}) < 1$
+   \item Fix strategy: \ding{182} \TODO{under-relaxation step;} \ding{183} \TODOG{strain limiting.} 
+   \begin{equation*}
+   \begin{split}
+    \BOLD{x}^{k+1} = \omega_{k+1}(&\TODO{\gamma(\hat{\BOLD{x}}^{(k+1)}-\BOLD{x}^{(k)})+\BOLD{x}^{(k)}}-\BOLD{x}^{(k-1)})+\BOLD{x}^{(k-1)} \\
+    &\gamma \in [0.6, 0.9]
+   \end{split}
+   \end{equation*}
+  \end{itemize}
+ \end{itemize}
+ \TikzDraw {
+  \node at (3.6, -0.28) {\includegraphics[scale=0.2]{img/UR}};
+  \draw[red, thick] (-1.2, -0.8) -- (1, -1.02);
+ }
+ %\gridlines
 \end{frame}
 
 \begin{frame}
@@ -142,7 +224,32 @@
 \end{frame}
 
 \begin{frame}
- \frametitle{Conclusion}
+ \frametitle{Comparison to CG}
+ \TikzDraw {
+  \node at (-2.4, -0.2) {\includegraphics[scale=0.2]{img/cg_comp}};
+  \node at (4.2, 0.1) {\includegraphics[scale=0.2]{img/cg}};
+  \draw [fill=white, white] (5.6, -2.4) rectangle (6.4, 3);
+  \draw [red, thick] (2.1, -1.05)--(4.12, -1.05);
+ }
+ %\gridlines
+\end{frame}
+
+\begin{frame}
+ \frametitle{Conclusions}
+ \textbf{Jacobi+Chebyshev}
+ \begin{itemize}
+  \item \TODO{Pros:}
+  \begin{itemize}
+   \item[-] Easy to implement, no requirement on linear solver libraries.
+   \item[-] GPU friendly, small memory cost.
+   \item[-] Relatively insensitive to small system changes, no need to re-factorize the matrix 
+   when the system get changed.
+  \end{itemize}
+  \item \textcolor{green!50!black}{Cons:}
+  \begin{itemize}
+   \item[-] Sacrifice of robustness, divergence when mesh is in low quality or under large stress.
+  \end{itemize}
+ \end{itemize}
 \end{frame}
 
 \begin{frame} 
