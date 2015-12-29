@@ -125,6 +125,77 @@
 
 \begin{frame}
   \frametitle{Chebyshev Semi-Iterative Approach}
+  \begin{itemize}
+   \item Jacobi and Gauss-Seidel iteration form:
+   \begin{equation*}
+   \begin{split}
+    \BOLD{x}^{(k+1)} &= \BOLD{B}^{-1}(\BOLD{Cx}^{(k)}+\BOLD{b}) \\
+    \BOLD{e}^{(k+1)} &= \BOLD{B}^{-1}\BOLD{Ce}^{(k)} \\
+    \BOLD{e}^{(k)} = (&\BOLD{B}^{-1}\BOLD{C})^k\BOLD{e}^{(0)} = \BOLD{Q}\BOLDG{\Lambda}^k\BOLD{Q}^{-1}\BOLD{e}^{(0)}
+   \end{split}
+   \end{equation*}
+  \item Converge $\rho(\BOLD{B}^{-1}\BOLD{C})<1$
+  \item Better result by linear combination
+  \begin{equation*}
+  \begin{split}
+   &\BOLD{y}^{(k)} = \sum_{j=0}^k v_{j, k}\BOLD{x}^{(j)} \\
+   &\ST \quad \sum_{j=0}^k v_{j, k} = 1
+  \end{split}
+  \end{equation*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Chebyshev Semi-Iterative Approach}
+ \begin{itemize}
+  \item Error:
+  \begin{equation*}
+  \begin{split}
+   \BOLD{e}^{(k)} &= \BOLD{y}^{(k)}-\BOLD{x}^*=\sum_{j=0}^k v_{j, k}(\BOLD{x}^{(j)}-\BOLD{x}^*) \\
+   &= \sum_{j=0}^kv_{j, k}(\BOLD{B}^{-1}\BOLD{C})^j\BOLD{e}^{(0)} = p_k(\BOLD{B}^{-1}\BOLD{C})\BOLD{e}^{(0)}
+  \end{split}
+  \end{equation*}
+  \item Reduce error $\BOLD{e}^{(k)} \Leftrightarrow$ reduce $\|p_k(\BOLD{B}^{-1}\BOLD{C})\|_2 = \max_{\lambda_i}|p_k(\lambda_i)|$
+  \item Though $\lambda_i$ is unknown, given spectral radius,
+  \begin{equation*}
+  \boxed {
+  \begin{split}
+   p_k(&x) = \argmin { \max_{-\rho \le x \le \rho}|p_k(x)|} \\
+    &\Rightarrow \TODO{p_k(x) = \frac{C_k(x/\rho)}{C_k(1/\rho)}}
+  \end{split}
+  }
+  \end{equation*}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Chebyshev Semi-Iterative Approach}
+ \begin{itemize}
+  \item Recurrence relation to iterative scheme
+  \begin{equation*}
+   \begin{split}
+    \BOLD{y}^{(k+1)} = &\omega_{k+1}(\BOLD{B}^{-1}(\BOLD{Cy}^{(k)}+\BOLD{b})-\BOLD{y}^{(k-1)})+\BOLD{y}^{(k-1)} \\
+    &\omega_{k+1} = \frac{2C_k(1/\rho)}{\rho C_{k+1}(1/\rho)}, i \ge 1, \omega_1 = 1
+   \end{split}
+  \end{equation*}
+  \pause
+  \item Looks similar to Jacobi and SOR, but converges much faster.
+  \TikzDraw {
+    \draw[red] (-2.4, 2.1) rectangle (-1.5, 3.1);
+    \draw[red] (3.4, 2.1) rectangle (4.5, 3.1);
+  }
+  \pause
+  \item $\hat \rho$ estimated spectral radius.
+  \begin{equation*}
+   \begin{split}
+    \hat \rho &= 0, \text{no acceleration} \\
+    \hat \rho &\in (0, \rho], \text{convergence rate} \uparrow \\
+    \hat \rho &> \rho, \text{still converges, oscillation happens} \\
+    \hat \rho &\rightarrow 1, \text{diverges}
+   \end{split}
+  \end{equation*}
+ \end{itemize}
+ %\gridlines
 \end{frame}
 
 \begin{frame}
