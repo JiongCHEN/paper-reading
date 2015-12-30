@@ -89,19 +89,19 @@
  \TikzDraw {
   \node at (-3.3, 0) {\parbox[t]{0.5\textwidth}{
     \begin{itemize}
-      \item Direct
+      \item \textbf{Direct}
       \begin{itemize}
-      \item \TODO{Statble}
-      \item \TODOG{Relatively expensive}
-      \item \TODOG{Cannot be accelerated by GPU}
-      \item \TODOG{Unneeded accuracy}
+      \item \textit{\TODO{Statble}}
+      \item \textit{\TODOG{Relatively expensive}}
+      \item \textit{\TODOG{Cannot be accelerated by GPU}}
+      \item \textit{\TODOG{Unneeded accuracy}}
       \end{itemize}
-      \item Jacobi
+      \item \textbf{Jacobi}
       \begin{itemize}
-       \item \TODO{Highly compatible with GPU}
-       \item \TODOG{Unstatble}
+       \item \textit{\TODO{Highly compatible with GPU}}
+       \item \textit{\TODOG{Unstatble}}
       \end{itemize}
-      \item Gauss-Seidel
+      \item \textbf{Gauss-Seidel}
     \end{itemize}
   }};
   \node at (2.6, 0) {\includegraphics[scale=0.2]{img/diff_ls}};
@@ -179,13 +179,13 @@
    \end{split}
   \end{equation*}
   \pause
-  \item Looks similar to Jacobi and SOR, but converges much faster.
+  \item Looks similar to weighted Jacobi and SOR, but converges much faster.
   \TikzDraw {
     \draw[red] (-2.4, 2.1) rectangle (-1.5, 3.1);
     \draw[red] (3.4, 2.1) rectangle (4.5, 3.1);
   }
   \pause
-  \item $\hat \rho$ estimated spectral radius.
+  \item $\hat \rho$ is the estimated spectral radius.
   \begin{equation*}
    \begin{split}
     \hat \rho &= 0, \text{no acceleration} \\
