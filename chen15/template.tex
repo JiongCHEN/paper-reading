@@ -10,11 +10,23 @@
 \usetheme{lankton-keynote}
 \input{preamble.tex}
 
+\newcommand{\BOLD}[1]{\mathbf{#1}}
+\newcommand{\BOLDG}[1]{\boldsymbol{#1}}
+\newcommand{\PDIF}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\TODO}[1]{\textcolor{red}{#1}}
+\newcommand{\TODOB}[1]{\textcolor{blue}{#1}}
+\newcommand{\TODOG}[1]{\textcolor{green!50!black}{#1}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\min}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\ST}{s.t.}
+\DeclareMathOperator{\diag}{diag}
+
 \author[Jiong Chen]{Jiong Chen}
 
 \title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{Data-Driven Finite Element for Geometry and Meterial Design}
 
-\date{September 30, 2015} %leave out for today's date to be insterted
+\date{November 25, 2016} %leave out for today's date to be insterted
 
 % \institute{Zhejiang University}
 
@@ -22,21 +34,186 @@
 
 \maketitle
 
-%\begin{frame}
-% \frametitle{Conclusion}
-% \TikzDraw {
-%   \visible<1-> { \node at (-1,1) 
-%     {\includegraphics[scale=0.2]{pic/algorithm.png}}; 
-%   }
-%   \visible<1> {\node at (2,-2) 
-%     {\parbox[t]{\textwidth}{\Large$\pi(x_1) = \pi(x_2) = x$}}; 
-%   }
-%   \visible<1> {\node at (7, -3) 
-%     {\parbox[t]{\textwidth}{$\alpha\circ \tau = -\alpha\\ cos(\alpha)=cos(-\alpha)$}};
-%   }
-% }
-% \gridlines
-%\end{frame}
+\begin{frame}
+  \frametitle{Challenge in FEM Simulation}
+  \begin{itemize}
+  \item Numerical simulation is inefficient
+  \item Limitation of acceleration techniques (reduction and numerical coarsening)
+    \begin{itemize}
+      \visible<2-> {\item Require complex precomputation}
+      \visible<3-> {\item Rely on prior of geometry and material composition
+      \begin{equation*}
+       \text{e.g.}\quad \int_{\mathbb{T}_q} \BOLDG{\epsilon}(\BOLD{u}):\BOLD{C}:\BOLDG{\epsilon}(\BOLD{u})~dV
+        = \int_{\mathbb{T}_q} \BOLDG{\epsilon}({\BOLD{\mathbb{U}}}):\BOLD{\mathbb{C}}:
+        \BOLDG{\epsilon}({\BOLD{\mathbb{U}}})~dV
+      \end{equation*}
+      }
+      \visible<5-> {\item Can not be reused when geometry and material change}
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \visible<4-> {
+      \draw[red, thick] (-2.05, -1.15) circle (6pt);
+      \draw[red, thick] (1.75, -1.15) circle (6pt);
+      \draw[red, thick] (-0.65, -0.8) circle (9pt);
+    }
+  }
+  %\gridlines
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overview of DDFEM}
+  \begin{itemize}
+  \item DDFEM: Fast runtime coarsening of \textcolor{red}{arbitrary, nonlinear} elastic material models
+    \begin{itemize}
+    \item Local support coarsening
+    \item Geometry independent: voxel discretization.
+    \item Discrete material: feasible to enumerate all finite material combination
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \node at (-3, -2.5) {\includegraphics[width=0.5\textwidth]{img/pipeline1.png}};
+    \node at (3, -2.5) {\includegraphics[width=0.5\textwidth]{img/pipeline2.png}};
+    \draw[blue, thick] (0, -1.5)--(0, -3.5);
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overview of DDFEM}
+  \TikzDraw {
+    \node at (0, 0) {\includegraphics[width=\textwidth]{img/ddfem}};
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithmic Details}
+  \begin{itemize}
+  \item Offline database construction
+    \begin{itemize}
+      \visible<1-> {\item Material palette
+      \begin{equation*}
+        \mathcal{P} = \{\mathcal{M}_0, \mathcal{M}_1, \dots, \mathcal{M}_n\}
+      \end{equation*}
+      }
+      \visible<2-> {\item Energy regression, store \quad\quad\quad\quad\quad in database 
+      \begin{equation*}
+        \boxed{
+          \BOLD{p}^* = \argmin_{\BOLD{p}^1} \sum_s \left(V_s^0-V^1(R(\BOLD{u}_s^0), \BOLD{p}^1)\right)^2
+        }
+      \end{equation*}
+      }
+      \visible<3-> {\item Coarse energy computation
+        \begin{equation*}
+          \boxed {
+            V^1(\BOLD{u}^1, \BOLD{p}^1) = \sum_{k=1}^8 w_kV_k^0(\BOLD{u}_k^0, \BOLD{p}_k^1, \BOLD{X}_k^1)
+          }
+        \end{equation*}
+      }
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \visible<2-> {\node[anchor=west] at (-4.2, 0.1) {\TODO{\emph{0-fine}}};}
+    \visible<2-> {\node[anchor=west] at (-4.2, -0.3) {\TODO{\emph{1-coarse}}};}
+    \visible<2-> {\node at (0.72, 0.8) {\includegraphics[scale=0.3]{img/kv}};}
+    \visible<2> {\node at (0.8, -2.2) {\includegraphics[width=0.6\textwidth]{img/fitting}};}
+    \visible<3-> {\draw[red, thick, ->] (2.5, -0.2) parabola (-1, -2.3);}
+    \visible<3> {\node at (3.2, -1.2) {\includegraphics[width=0.3\textwidth]{img/fine2coarse}};}
+  }
+  %\gridlines
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithmic Details}
+  \begin{itemize}
+  \item Offline database construction
+    \begin{itemize}
+      \visible<1-> {\item Anisotropy}
+      \visible<2-> {\item Force space sampling}
+      \visible<3-> {\item Regularization}
+      \visible<4-> {\item Database compression}
+      \visible<5-> {\item Hierarchical coarsening}
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \visible<1> {
+      \node at (0, 0) { \parbox[h]{\textwidth} {
+          \begin{equation*}
+            \begin{split}
+              V^1(\BOLD{u}^1, \BOLD{p}^1, C)&= \sum_{k=1}^8(w_kV_k^0(\BOLD{u}_k^0, \BOLD{p}_k^1, \BOLD{X}_k^1)\\
+              &\textcolor{red}{+C_k(\sqrt{\BOLD{v}^T\BOLD{F}^T_k\BOLD{F}_k\BOLD{v}}-1)^2)}
+            \end{split}
+          \end{equation*}
+        }
+      };
+    }
+    \visible<2> {\node at (0, -1) {\includegraphics[width=0.6\textwidth]{img/forcespace}};}
+    \visible<3> {\node at (0, -1.2) {\parbox[h]{\textwidth} {
+          \begin{equation*}
+            \sum_s \left(V_s^0-V^1(R(\BOLD{u}_s^0), \BOLD{p}^1)\right)^2
+            \textcolor{red}{+\lambda\sum_k(\BOLD{p}_k^1-\BOLD{p}_k^0)^2}
+          \end{equation*}          
+      }};}
+    \visible<4> {\node at (-2.5, -2.2) {\parbox[h]{0.5\textwidth} {
+          \begin{equation*}
+            \begin{split}
+             d(A, B) = \quad\quad\quad\quad\quad\quad\quad\quad\\
+             \sqrt{\sum_s (\log(V_s^A)-\log(V_s^B))^2}
+            \end{split}
+          \end{equation*}
+      }};}
+    \visible<4> {\node at (2.5, -2.2) {\includegraphics[width=0.4\textwidth]{img/datacomp}};}
+    \visible<5> {\node at (0, -2.7) {\includegraphics[width=0.5\textwidth]{img/hierarchycoarsen}};}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithmic Details}
+  \begin{itemize}
+  \item Online coarsening
+    \begin{itemize}
+      \visible<1-> {\item Replace each $2\times2\times2$ block in high resolution mesh with a single coarse element}
+      \visible<2-> {\item Assign material using high resolution material IDs as database key}
+      \visible<3-> {\item Static simulation}
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \visible<1> {\node at (2, -2.2) {\includegraphics[width=0.3\textwidth]{img/finemtr}};}
+    \visible<2> {\node at (2, -2.2) {\includegraphics[width=0.3\textwidth]{img/coarsemtr}};}
+    \visible<3> {\node at (2, -2.2) {\includegraphics[width=0.3\textwidth]{img/simulate}};}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Limitations and Future Work}
+  \begin{itemize}
+  \item Better metamaterial structures to combat the combinatorial explosion.
+  \item Boundary representation.
+  \item Continuous material space coarsening.
+  \item Applied to improve the convergence rate of multigrid.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comparison to Our Methods}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Questions Remain to be Answered}
+  \begin{itemize}
+  \item How heterasd and coarsening itself affect the coarse constitutive law?
+  \item Impact of different discretization, linear finite element or high order element.
+  \item Energy preserving?
+  \item If energy is preserved, how to avoid overfitting in a small sample set?
+  \item Can we find the some regression patterns and DOFs to get the least errors?
+  \item How the error impact the simulation?
+  \end{itemize}
+\end{frame}
 
 \begin{frame} 
   \TikzDraw {
