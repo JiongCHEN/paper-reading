@@ -1,0 +1,45 @@
+\usepackage{graphicx,color}
+% remove caption of figure
+\usepackage[labelformat=empty]{caption}
+
+\usepackage[none]{hyphenat} % hyphenation is ugly in slides
+\usepackage{parskip}
+
+\usepackage{relsize} % \smaller to change size
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usetikzlibrary{arrows}
+
+\newcommand{\TikzDraw}[2][]{
+  \begin{tikzpicture}[overlay, remember picture, shift={(current page.center)}, #1]
+    #2
+  \end{tikzpicture}
+}
+
+\newcommand{\gridlines}{
+  \TikzDraw{
+    \draw[help lines,xstep=.2,ystep=.2,red!20] (current page.south west) grid (current page.north east);
+    \draw[help lines,xstep=1,ystep=1,red] (current page.south west) grid (current page.north east);
+    \foreach \x in {-15,-14,...,15} {
+      \node [anchor=north, red] at (\x,0) {\tiny \x};
+      \node [anchor=east,red] at (0,\x) {\tiny \x};
+    }
+  }
+}
+
+\newcommand{\DrawOnImg}[3][]
+{
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (image) at (0,0){
+      #2
+    };
+    \begin{scope}[x={(image.south east)},y={(image.north west)}]
+      \ifthenelse{\equal{#1}{grid}}
+                 {\draw[color=blue, style=dashed] (0,0) grid[xstep=.1, ystep=.1] (1.0001,1.0001);}
+                 {}
+                 #3
+    \end{scope}
+  \end{tikzpicture}
+}
