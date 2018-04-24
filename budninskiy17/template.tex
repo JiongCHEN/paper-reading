@@ -121,7 +121,9 @@
     \item[-] Point set $\{x_i\}_{i=1...n} \in R^D$ sampled from a connected $d$-manifold.
     \end{itemize}
   \item Output
+    \begin{itemize}
     \item[-] Most isometric embedding $\{z_i\}_{i=1\dots n} \in R^d$.
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -147,11 +149,17 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Geodesic distance correction}
+  \frametitle{Geodesic distance computation}
+  \begin{itemize}
+  \item For any pair $p, q$, the geodesic distance is approxiamted as
+    the shortest path.
+  \item Geodesic correction
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.6\textwidth]{img/geodesic_correction}       
+    \end{figure}
+  \end{itemize}
   \TikzDraw {
-    \visible<1> {
-      \node at (0, 0) {\includegraphics[width=\textwidth]{img/geodesic_correction}};
-    }
     \visible<2> {
       \node at (0, 0) {
         \includegraphics[width=\textwidth]{img/eval_geodesic_correction}
@@ -200,7 +208,6 @@
   \item \emph{\TODO{Preserve the local relative coordinates as best as possible.}}
   \end{itemize}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Results}  
