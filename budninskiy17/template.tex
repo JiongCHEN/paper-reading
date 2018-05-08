@@ -27,7 +27,7 @@
 \DeclareMathOperator{\Div}{div}
 
 \title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{Spectral Affine-Kernel Embeddings}
-\date{April 24th, 2017}
+\date{May 8th, 2017}
 
 \author{Max Budninskiy, Beibei Liu,\\ Yiying Tong, Mathieu Desbrun}
 
@@ -36,7 +36,15 @@
 \maketitle
 
 \begin{frame}
-  \frametitle{Emebbeding}
+  \frametitle{Embedding}
+  \begin{itemize}
+  \item High dimensional data often relies on or near a much
+    lower dimensional, curved manifold.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Embedding}
   \begin{itemize}
   \item Mapping high dimensional data into lower dimensional space with
     low distortion.
@@ -82,11 +90,14 @@
 \begin{frame}
   \frametitle{Nonlinear approach}
   \begin{itemize}
-  \item Inefficient computation of pairwise geodesic distance
-  \item Geodesic distance computation is not accurate enough
-  \item Solve for embedding is computational demanding
+  \item Disadvantages
     \begin{itemize}
-    \item[-] SVD of $n\times n$ dense matrix
+    \item Inefficient computation of pairwise geodesic distance
+    \item Geodesic distance computation is not accurate enough
+    \item Solve for embedding is computational demanding
+      \begin{itemize}
+      \item[-] SVD of $n\times n$ dense matrix
+      \end{itemize}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -142,10 +153,32 @@
 \begin{frame}
   \frametitle{Proximity graph}
   \begin{itemize}
+  \item Traditional approach: connect K-nearest neighbors
   \item Small $k$ to linking points and construct graph
-    
+    \begin{itemize}
+    \item[-] Better approximation of geodesic distance
+    \end{itemize}
   \item Larger $K$ to define the neighborhood
+    \begin{itemize}
+    \item[-] Robust to noise
+    \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proximity graph}
+  \TikzDraw {
+    \visible<1> {
+      \node at (0, 0) {
+        \includegraphics[width=0.8\textwidth]{img/sparse_noise}
+      };
+    }
+    \visible<2> {
+      \node at (0, 0) {
+        \includegraphics[width=0.8\textwidth]{img/gaussian_noise}
+      };
+    }
+  }
 \end{frame}
 
 \begin{frame}
@@ -171,12 +204,26 @@
 \begin{frame}
   \frametitle{Local embedding}
   \begin{itemize}
-  \item $D_i = (l_{pq})$
+  \item Extract distance matrix
+    \begin{equation*}
+      D_i = (l_{pq})
+    \end{equation*}
+  \item Multidimensional scaling
+    \begin{equation*}
+     \argmin_Y \|YY^T-G_i\|_F^2, \text{~s.t.~~rank}(Y) = d.
+    \end{equation*}
+  \item Gram matrix through double centering
+    \begin{equation*}
+      \begin{split}
+        &G_i = -\frac{HD^2H}{2} \\
+        &H_{ij} = \delta_{ij}-1/N
+      \end{split}
+    \end{equation*}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Find local $L_i$}
+  \frametitle{Assemble $L_i$}
   \begin{itemize}
   \item Embedded points
     \begin{equation*}
@@ -186,10 +233,37 @@
     \begin{equation*}
       E_i = (y_{j_1}-y_i; \dots; y_{j_K}-y_i) \in R^{d\times K}
     \end{equation*}
-  \item SVD: $E_i = U\Lambda V^T$
+  \item Find the kernel: $E_i = U\Lambda V^T$
   \item For one certain sigular vector $w^p \in R^K$
     \begin{equation*}
-      E_i w^p = \sum_{j\in \mathcal{N}(i)} w^p_j(y_{j}-y_i) = (-\sum_m w^p_i, w_{j_1}, \dots, w_{j_K})Y_i = 0
+      E_i w^p = \sum_{j\in \mathcal{N}(i)} w^p_j(y_{j}-y_i) = 0
+    \end{equation*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assemble $L_i$}
+  \begin{itemize}
+  \item In matrix form $L_i \in R^{(K-d)\times (K+1)}$
+    \begin{equation*}
+      L_i = 
+      \begin{pmatrix}
+        \sum_m w^1_{j_m} & w^1_{j_1} & \dots & w^1_{j_K} \\
+        \sum_m w^2_{j_m} & w^2_{j_1} & \dots & w^2_{j_K} \\
+        \vdots & \vdots & \vdots &\vdots \\
+        \sum_m w^{K-d}_{j_m} & w^{K-d}_{j_1} & \dots & w^{K-d}_{j_K} 
+      \end{pmatrix}
+    \end{equation*}
+  \item Affine kernel
+    \begin{equation*}
+      L_i
+      \begin{pmatrix}
+        a^Ty_{i}+b \\
+        a^Ty_{j_1}+b \\
+        \vdots \\
+        a^Ty_{j_K}+b         
+      \end{pmatrix}
+      =0
     \end{equation*}
   \end{itemize}
 \end{frame}
@@ -205,12 +279,55 @@
     \begin{equation*}
       \argmin_Z \frac{1}{2}\text{tr}(Z^TQZ), \text{~~s.t.~~} Z^TZ = Id
     \end{equation*}
-  \item \emph{\TODO{Preserve the local relative coordinates as best as possible.}}
+  \item Extract smallest $(d+1)$ eigenvectors
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Results}  
+  \frametitle{Summary}
+  \begin{itemize}
+  \item \emph{\TODO{Preserve the local relative coordinates as best as possible.}}
+  \item Exact recover for pointset sampled from a developable manifold
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/bumps}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/s_shape}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/faces_data}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  Deformation
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/sake_deformation}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comments}
+  \begin{itemize}
+  \item Preconditioner?
+  \item Generalize the concept of ``invariance of local coordinate''.
+  \end{itemize}
 \end{frame}
 
 \begin{frame} 
