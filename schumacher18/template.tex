@@ -40,6 +40,47 @@
 \maketitle
 
 \begin{frame}
+  \frametitle{M. C. Escher}
+  \TikzDraw {
+    \node at (-3, 0) {
+      \includegraphics[width=0.5\textwidth]{img/escher-0}
+    };
+    \node at (3, 0) {
+      \includegraphics[width=0.48\textwidth]{img/escher-1}
+    };
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Escherization}
+  \TikzDraw {
+    \node at (-3, 0) {
+      \includegraphics[width=0.3\textwidth]{img/escher}
+    };
+    \node at (2.5, 0) {
+      \includegraphics[width=0.5\textwidth]{img/escherization}
+    };
+    \node at (-3, -3) {
+      [Kaplan 2000]
+    };
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tillings}
+  \begin{itemize}
+  \item Tilling of the plane
+    \begin{itemize}
+    \item[-] A collection of shapes (tiles) that cover the plane without any gaps and overlays.
+    \end{itemize}
+  \item Isohedral tilling
+    \begin{itemize}
+    \item[-] IH1,...,IH93
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Isohedral Tillings}
   \TikzDraw{
     \node at (-0.39\textwidth, 0) {
@@ -54,36 +95,113 @@
     \node at (0.39\textwidth, 0) {
       \includegraphics[width=0.25\textwidth]{img/paper-003}
     };
+    \visible<2-> {
+      \node at (0, 0) {
+        \includegraphics[width=1.1\textwidth]{img/teaser}
+      };
+      \node at (0, -2.5) {
+        \TODO{Mechanical property?}
+      };
+    }
   }  
 \end{frame}
 
 \begin{frame}
   \frametitle{Overview}
-  
+  \begin{itemize}
+  \item Physical modeling of sheet network
+    \begin{itemize}
+    \item[-] Mesoscopic model
+    \item[-] Macroscopic model
+    \end{itemize}
+  \item Homogenization
+  \item Characterization
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Mesoscopic Model}
-  
+  \begin{itemize}
+  \item Discrete elastic rod
+    
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Macroscopic Model}
   \begin{itemize}
   \item Anisotropic Kirchhoff plate
-    \begin{equation}
-      W(\epsilon, \kappa)
-    \end{equation}
+    \[
+      W(\epsilon, \kappa) = \frac{1}{2}\epsilon :\mathbb{C}:\epsilon+\frac{1}{2}\kappa:\mathbb{B}:\kappa
+    \]
+  \item Strain-stress relationship
+    \[
+    \sigma = \mathbb{C}:\epsilon,\quad M = \mathbb{B}:\kappa
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Homogenization}
+  \begin{itemize}
+  \item Membrane material tensor fitting
+    \[
+    \mathbb{S}^H = \argmin_{\mathbb{S}} \sum_i^N \frac{1}{\|\epsilon_i\|_F^2}\|\mathbb{S}:\sigma_i-\epsilon_i\|_F^2
+    \]
+  \item Data generation
+    \begin{itemize}
+    \item[-] Periodic boundary condition
+    \item[-] Load
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Homogenization}
+  \begin{itemize}
+  \item Bending material tensor fitting
+    \[
+    \mathbb{B}^H = \argmin_{\mathbb{B}}\sum_i^M (\frac{1}{2}\kappa_i:\mathbb{B}:\kappa_i-W_i)^2
+    \]
   \end{itemize}  
 \end{frame}
 
 \begin{frame}
   \frametitle{Homogenization}
-  
+  \begin{itemize}
+  \item Determining the test set.
+  \item Nonlinearities.
+  \end{itemize}  
 \end{frame}
 
 \begin{frame}
-  \frametitle{}
+  \frametitle{Investigate Direction-Dependent Elasticity}
+  \begin{itemize}
+  \item Young's modulus
+    \[
+    E(d) = \frac{1}{(dd^T):\mathbb{S}:(dd^T)}
+    \]
+  \item Poisson ratio
+    \[
+    \nu(d) = -\frac{(dd^T):\mathbb{S}:(nn^T)}{(dd^T):\mathbb{S}:(dd^T)}
+    \]
+  \item Bending moment
+    \[
+    b(d) = (dd^T):\mathbb{B}:(dd^T)
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Symmetries}
+  \begin{itemize}
+  \item Geometric symmetries
+  \item Material symmetries
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{From Geometry to Material}
   
 \end{frame}
 
