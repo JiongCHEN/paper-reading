@@ -73,6 +73,7 @@
     \begin{itemize}
     \item[-] A collection of shapes (tiles) that cover the plane without any gaps and overlays.
     \end{itemize}
+    \pause
   \item Isohedral tilling
     \begin{itemize}
     \item[-] IH1,...,IH93
@@ -123,8 +124,18 @@
   \frametitle{Mesoscopic Model}
   \begin{itemize}
   \item Discrete elastic rod
-    
+    \begin{itemize}
+    \item[-] Stretching, bending, twisting
+    \end{itemize}
   \end{itemize}
+  \TikzDraw {
+    \node at (-2.5, -2) {
+      \includegraphics[width=0.5\textwidth]{img/rod_math_model}
+    };
+    \node at (3, -2) {
+      \includegraphics[width=0.6\textwidth]{img/real_rod}
+    };
+  }
 \end{frame}
 
 \begin{frame}
@@ -148,10 +159,11 @@
     \[
     \mathbb{S}^H = \argmin_{\mathbb{S}} \sum_i^N \frac{1}{\|\epsilon_i\|_F^2}\|\mathbb{S}:\sigma_i-\epsilon_i\|_F^2
     \]
+    \pause
   \item Data set construction
     \begin{itemize}
     \item[-] Generate deformation
-    \item[-] Obtain strain-stress pair
+    \item[-] Obtain macroscopic strain-stress pair
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -171,12 +183,12 @@
       \[
       \begin{split}
         &F = [x_i-x_j, x_i-x_l][X_i-X_j, X_i-X_l]^{-1} \\
-        &\epsilon = \frac{1}{2}(F^T+F)-Id
+        &\epsilon = \frac{1}{2}(F^T+F)-I
       \end{split}
       \]
     \item<4->[-] Stress
       \[
-      \sigma = [f_0, f_1][n_0, n_1]^{-1}
+      \sigma \cdot n = f \quad \Rightarrow \quad \sigma = [f_0, f_1][n_0, n_1]^{-1}
       \]
     \end{itemize}
   \end{itemize}
@@ -206,15 +218,20 @@
     \[
     \mathbb{B}^H = \argmin_{\mathbb{B}}\sum_i^M (\frac{1}{2}\kappa_i:\mathbb{B}:\kappa_i-W_i)^2
     \]
-  \item<2> Uniaxial bending deformation
+  \item<2> Data set construction
   \end{itemize}
   \TikzDraw {
     \visible<3-> {
     \node at (-2.5, -2) {
       \includegraphics[width=0.5\textwidth]{img/bending_defm}
     };
+    }
+    \visible<4-> {
     \node at (3, -2) {
       \includegraphics[width=0.5\textwidth]{img/bending_bc}
+    };
+    \node at (3, -4) {
+      $\BOLD{x}_j = \BOLD{R}_{ij}\BOLD{x}_i+\BOLD{d}_{ij}$
     };
     }
   }
@@ -223,8 +240,16 @@
 \begin{frame}
   \frametitle{Homogenization}
   \begin{itemize}
-  \item Determining the test set.
+  \item Determining the size of test set
+    \begin{itemize}
+    \item[-] Cross validation scheme.
+    \end{itemize}
   \item Nonlinearities.
+    \begin{itemize}
+    \item[-] Multiple test sets with varying deformation magnitude
+    \item[-] Uniaxial and biaxial deformation (0.1\% \& 10.0\%)
+    \item[-] Curvature (0.1$m^{-1}$ \& 5$m^{-1}$)
+    \end{itemize}
   \end{itemize}  
 \end{frame}
 
@@ -239,7 +264,7 @@
     \[
     \nu(d) = -\frac{(dd^T):\mathbb{S}:(nn^T)}{(dd^T):\mathbb{S}:(dd^T)}
     \]
-  \item Bending moment
+  \item Bending stiffness
     \[
     b(d) = (dd^T):\mathbb{B}:(dd^T)
     \]
@@ -248,18 +273,35 @@
 
 \begin{frame}
   \frametitle{Symmetries}
-  \begin{itemize}
-  \item Geometric symmetries
-  \item Material symmetries
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{From Geometry to Material}
   \TikzDraw {
-    \node at (0, 0) {
-      \includegraphics[width=0.5\textwidth]{img/symmetry}
+    \node at (-2.5, 0) {
+      \parbox[t]{0.6\textwidth} {
+        \begin{itemize}
+        \item Geometric symmetries
+          \begin{itemize}
+          \item[-] Rotational symmetry
+          \item[-] Reflection symmetry
+          \end{itemize}
+        \item Material symmetries
+          \begin{itemize}
+          \item[-] Anisotropic
+          \item[-] Orthotropic
+          \item[-] Tetragonal
+          \item[-] Isotropic
+          \end{itemize}
+        \end{itemize}
+      }      
     };
+    \visible<2> {
+      \node at (3, 0) {
+        \includegraphics[width=0.5\textwidth]{img/symmetry}      
+      };
+    }
+    \visible<3> {
+      \node at (3, 0) {
+        \includegraphics[width=0.3\textwidth]{img/inv_example}
+      };
+    }
   }
 \end{frame}
 
@@ -287,11 +329,44 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Isohedral Tilling Explorer}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/gallery}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Accuracy}
+  \TikzDraw {
+    \visible<1> {
+      \node at (0, 0) {      
+        \includegraphics[width=\textwidth]{img/structure_group_1}
+      };
+    }
+    \visible<2> {
+      \node at (0, 0) {
+        \includegraphics[width=\textwidth]{img/structure_group_2}
+      };
+    }
+  }
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Inverse structure optimization}
   \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{img/inv_opt}
   \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Limitations and future work}
+  \begin{itemize}
+  \item Nonlinear macroscopic constitutive model.
+  \item Characterization of irregular tillings.
+  \end{itemize}
 \end{frame}
 
 \begin{frame} 
