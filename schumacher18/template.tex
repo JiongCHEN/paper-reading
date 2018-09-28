@@ -148,12 +148,55 @@
     \[
     \mathbb{S}^H = \argmin_{\mathbb{S}} \sum_i^N \frac{1}{\|\epsilon_i\|_F^2}\|\mathbb{S}:\sigma_i-\epsilon_i\|_F^2
     \]
-  \item Data generation
+  \item Data set construction
     \begin{itemize}
-    \item[-] Periodic boundary condition
-    \item[-] Load
+    \item[-] Generate deformation
+    \item[-] Obtain strain-stress pair
     \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Homogenization}
+  \begin{itemize}
+  \item Generate deformation
+    \begin{itemize}
+    \item<1->[-] Uniaxial and biaxial stretch
+    \item<2->[-] Periodical boundary condition
+      \[x_j = x_i+d_{ij}\]
+    \end{itemize}
+  \item<3-> Calculate strain-stress pair
+    \begin{itemize}
+    \item<3->[-] Strain
+      \[
+      \begin{split}
+        &F = [x_i-x_j, x_i-x_l][X_i-X_j, X_i-X_l]^{-1} \\
+        &\epsilon = \frac{1}{2}(F^T+F)-Id
+      \end{split}
+      \]
+    \item<4->[-] Stress
+      \[
+      \sigma = [f_0, f_1][n_0, n_1]^{-1}
+      \]
+    \end{itemize}
+  \end{itemize}
+  \TikzDraw {
+    \visible<1> {
+      \node at (3.5, 1) {
+        \includegraphics[width=0.4\textwidth]{img/membrane_defm}
+      };
+    }
+    \visible<2> {
+      \node at (4, 0) {
+        \includegraphics[width=0.3\textwidth]{img/membrane_bc}
+      };
+    }
+    \visible<3-> {
+      \node at (4, 1) {
+        \includegraphics[width=0.2\textwidth]{img/strain-stress-calc}
+      };
+    }
+  }
 \end{frame}
 
 \begin{frame}
@@ -163,7 +206,18 @@
     \[
     \mathbb{B}^H = \argmin_{\mathbb{B}}\sum_i^M (\frac{1}{2}\kappa_i:\mathbb{B}:\kappa_i-W_i)^2
     \]
-  \end{itemize}  
+  \item<2> Uniaxial bending deformation
+  \end{itemize}
+  \TikzDraw {
+    \visible<3-> {
+    \node at (-2.5, -2) {
+      \includegraphics[width=0.5\textwidth]{img/bending_defm}
+    };
+    \node at (3, -2) {
+      \includegraphics[width=0.5\textwidth]{img/bending_bc}
+    };
+    }
+  }
 \end{frame}
 
 \begin{frame}
@@ -202,7 +256,11 @@
 
 \begin{frame}
   \frametitle{From Geometry to Material}
-  
+  \TikzDraw {
+    \node at (0, 0) {
+      \includegraphics[width=0.5\textwidth]{img/symmetry}
+    };
+  }
 \end{frame}
 
 \begin{frame} 
@@ -212,8 +270,28 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Validation}
+  \TikzDraw{
+    \node at (-3, 0) {
+      \includegraphics[width=0.4\textwidth]{img/real_mem_test}
+    };
+    \node at (3, 0) {
+      \includegraphics[width=0.3\textwidth]{img/real_bend_test}
+    };
+    \visible<2-> {
+    \node at (0, 0) {
+      \includegraphics[width=\textwidth]{img/real_vs_sim}
+    };
+    }
+  }
+\end{frame}
+
+\begin{frame}
   \frametitle{Inverse structure optimization}
-  
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/inv_opt}
+  \end{figure}
 \end{frame}
 
 \begin{frame} 
