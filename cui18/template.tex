@@ -126,8 +126,62 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Dynamics}
+  \begin{itemize}
+  \item Vorticity formulation of NS equation
+    \[
+    \begin{split}
+      \dot \omega = \Adv(u, \omega) +\nu \Delta \omega + \curl(f) \\
+    \end{split}
+    \]
+    \item Advection
+      \[
+      \Adv(u, \omega) = \curl(\omega \times u)
+      \]
+    \item Galerkin projection
+      \[
+      \begin{split}
+        \sum_k \dot w_k \phi_k = \sum_i \sum_j w_i w_j \Adv(\Psi_i, \phi_j) + &\nu \sum_k w_k \Delta \phi_k +\curl(f) \\
+        \visible<2> {&\color{red}{\nu \sum_k w_k \lambda_k \phi_k}}
+      \end{split}
+      \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dynamics}
+  \begin{itemize}
+  \item Pair with $\phi_k$
+    \[
+    \dot w_k = \sum_i\sum_j w_i w_j\langle \Adv(\Psi_i, \phi_j),\phi_k\rangle + \nu \lambda_k w_k  + f_k
+    \]
+    \pause
+  \item Time integration
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.6\textwidth]{img/time_integration}
+    \end{figure}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Leaving issues}
-  
+  \begin{itemize}
+  \item Large memory cost $O(rN^3)$
+    \pause
+  \item Slow evaluation of $Uw$ and $U^Tf$
+    \pause
+    \begin{itemize}
+    \item[-] take up to 84\% of running time
+      \pause
+    \item[-] Calculate basis on the fly is more slower (5$\times$ to 7$\times$)
+      \pause
+    \end{itemize}
+  \item Only Dirichlet boundary condition is considered
+    \pause
+  \item Stability of explicit integration
+    \pause
+  \end{itemize}
 \end{frame}
 
 \begin{frame} 
@@ -135,6 +189,21 @@
     \node at (0, 0.5) {\Huge{Results}};
   }
   %\gridlines
+\end{frame}
+
+\begin{frame}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/teaser}
+  \end{figure}
+  \TikzDraw {
+    \node at (0, 4) {\color{red}{$r=200$}};
+    \node at (-3.5, 4) {\color{red}{$r=100$}};
+    \node at (3.5, 4) {\color{red}{$r=1000$}};
+    \node at (-3.5, 1.2) {\color{red}{$r=2000$}};
+    \node at (0, 1.2) {\color{red}{$r=4000$}};
+    \node at (3.5, 1.2) {\color{red}{$r=12600$}};
+  }
 \end{frame}
 
 \begin{frame} 
