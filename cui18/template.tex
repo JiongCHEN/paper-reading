@@ -26,6 +26,7 @@
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\Div}{div}
 \DeclareMathOperator{\Adv}{Adv}
+\DeclareMathOperator{\curl}{curl}
 
 \title[\hspace{2em}\insertframenumber/\inserttotalframenumber]{Scalable Laplacian Eigenfluids}
 \date{12th, October 2018}
@@ -43,8 +44,30 @@
 \begin{frame}
   \frametitle{Fluid Simulation}
   \begin{itemize}
-  \item Velocity formulation
-  \item Vorticity formulation
+  \item NS equation
+    \[
+    \begin{split}
+      &\frac{\partial u}{\partial t}+(u\cdot \nabla )u+\frac{1}{\rho}\nabla p
+      = f+\nu \Delta u \\
+      &\nabla \cdot u = 0
+    \end{split}
+    \]
+   \pause
+  \item Discretization method
+    \begin{itemize}
+    \item[-] Eulerian
+    \item[-] Lagrangian
+    \item[-] Mixed
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Eulerian method}
+  \begin{itemize}
+  \item Spatial complexity $O(N^3)$
+    \pause
+  \item Reduction method?
   \end{itemize}
 \end{frame}
 
@@ -53,11 +76,51 @@
   \begin{itemize}
   \item Subspace approach
     \[
-    u = \sum_i^r w_i \Psi_i
+    u = \sum_{i=1}^r w_i \Psi_i
     \]
-  \item Reduced vorticity equation
+  \item Eigenproblem
     \[
-    \sum_i
+    \begin{split}
+      &\Delta \Psi_i = \lambda_i \Psi_i \\
+      &\nabla \cdot \Psi_i = 0 \\
+      &\Psi_i \cdot n = 0, \text{on~} \partial D
+    \end{split}
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Laplacian Eigenfluid}
+  \begin{itemize}
+  \item On the square domain $[0, \pi]\times [0, \pi]$
+    \[
+    \begin{split}
+    &\Psi_x(k) = -\frac{1}{\sqrt{k_x^2+k_y^2}}k_y\sin(k_x x) \cos(k_y y) \\
+      &\Psi_y(k) = \frac{1}{\sqrt{k_x^2+k_y^2}}k_x\cos(k_x x) \sin(k_y y) \\
+      &k_x, k_y \in \mathbb{Z}^+
+    \end{split} 
+    \]
+  \end{itemize}
+  \TikzDraw {
+    \node at (0, -3) {
+      \includegraphics[width=\textwidth]{img/eigenmodes}
+    };
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Remarks}
+  \begin{itemize}
+  \item Vorticity bases
+    \[
+    \begin{split}
+    &\phi_i = \nabla \times \Psi_i \\
+    &\omega  = \curl u = \sum_{i=1}^r w_i \phi_i
+    \end{split}
+    \]
+  \item Orthogonality
+    \[
+    \int_D \|u\|^2 = \sum_i w_i^2
     \]
   \end{itemize}
 \end{frame}
